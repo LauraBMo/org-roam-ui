@@ -33,7 +33,7 @@ export const OptionPanel = (props: OptionPanelProps) => {
     <CUIAutoComplete
       labelStyleProps={{ fontWeight: 300, fontSize: 14 }}
       items={optionArray}
-      label={`Add tag to ${displayName}`}
+      label={`Add tag to ${displayName} (${selectedItems.length}/${optionArray.length})`}
       placeholder=" "
       onCreateItem={(item) => null}
       disableCreateItem={true}

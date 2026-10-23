@@ -41,7 +41,7 @@ export const TagColorPanel = (props: TagColorPanelProps) => {
       <CUIAutoComplete
         items={tagArray}
         labelStyleProps={{ fontWeight: 300, fontSize: 14 }}
-        label="Add tag to color"
+        label={`Add tag to color (${selectedItems.length}/${tagArray.length})`}
         placeholder=" "
         disableCreateItem={true}
         selectedItems={selectedItems}
