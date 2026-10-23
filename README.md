@@ -1,3 +1,74 @@
+# org-roam-ui — LauraBMo's fork
+
+Fork of [org-roam/org-roam-ui](https://github.com/org-roam/org-roam-ui), branched from upstream `main` at
+`2894dcb` (2026-01-06).  Upstream's last code commit is 2022-11-05; the fixes since then live in its open
+pull requests, so this fork merges the ones that matter and keeps a prebuilt `out/` in the tree.
+
+**Merged here, still open upstream:**
+
+| PR | What it fixes |
+|---|---|
+| [#341](https://github.com/org-roam/org-roam-ui/pull/341) | node hit-testing without the hidden hit canvas — clicks on hubs land |
+| [#344](https://github.com/org-roam/org-roam-ui/pull/344) | search over node title, headings, tags and body text |
+| [#345](https://github.com/org-roam/org-roam-ui/pull/345) | no re-initialisation (and no port churn) when the theme changes |
+| [#346](https://github.com/org-roam/org-roam-ui/pull/346) | sidebar preview starts at the top of each note |
+| [#347](https://github.com/org-roam/org-roam-ui/pull/347) | each backlinking note listed once |
+| [#336](https://github.com/org-roam/org-roam-ui/pull/336) | web-UI settings saved to `.org-roam-ui-web-settings` in the org-roam directory |
+| [#94](https://github.com/org-roam/org-roam-ui/pull/94) | selected/total counters in the tag panels (`Add tag to color (3/47)`) |
+| [#327](https://github.com/org-roam/org-roam-ui/pull/327) | `http(s)` links resolve to existing ref nodes as edges |
+| [#303](https://github.com/org-roam/org-roam-ui/pull/303) | byte-compiles when `org-roam-dailies` is absent |
+
+**Local fix, not upstream:** the Emacs theme is pushed when a browser connects (`--ws-on-open`).  Upstream sent
+it only from `enable-theme-functions`, so a freshly opened browser started in the web app's dark default.
+
+## Install
+
+`out/` is committed, because nothing builds at install time.  straight (Doom):
+
+```elisp
+(package! org-roam-ui
+  :recipe (:host github :repo "LauraBMo/org-roam-ui"
+           :files (:defaults "out")))
+```
+
+For a local checkout, use `:local-repo "/path/to/checkout"` with the same `:files` — straight then symlinks the
+tree, so a rebuild is picked up without reinstalling.
+
+## Building
+
+Node 16 is required: Next 11 / webpack 5 fails on modern Node with `ERR_OSSL_EVP_UNSUPPORTED`.
+
+```bash
+npm install --legacy-peer-deps          # not `npm ci`: the lockfile drifts against package.json
+npx -y -p node@16 node node_modules/next/dist/bin/next build
+npx -y -p node@16 node node_modules/next/dist/bin/next export
+git add out && git commit -m "chore: build"
+```
+
+`npm install` rewrites `yarn.lock` wholesale; run `git checkout -- yarn.lock` afterwards.  A successful export is
+not proven by its file count — grep the bundle for a string from the code you changed.
+
+## Web-UI settings file
+
+With [#336](https://github.com/org-roam/org-roam-ui/pull/336), *Tweaks → Storage* saves the browser's settings
+to `<org-roam-directory>/.org-roam-ui-web-settings` and Emacs pushes them back on connect.  Only these keys are
+applied on connect: `3d`, `tagCols`, `physics`, `filter`, `visuals`, `behavior`, `mouse`, `coloring`, `local`.
+`colorTheme` is **not** among them — colours still come from Emacs, so the file and the theme do not fight.
+
+## TODO
+
+- [ ] Merge [#276](https://github.com/org-roam/org-roam-ui/pull/276) (`org-roam-ui-readonly-mode`) and add a
+      **save mode** checkbox in *Tweaks → Behavior* that toggles it, so create/delete can be turned off from the
+      browser instead of only from Emacs.
+- [ ] Offer the local theme fix upstream, and re-send [#94](https://github.com/org-roam/org-roam-ui/pull/94)
+      rebased on the current tree (its `TagPanel.tsx` no longer exists; the change belongs in `OptionPanel.tsx`).
+
+## Upstream documentation
+
+Everything below is upstream's README, unchanged.
+
+---
+
 [![ci](https://github.com/org-roam/org-roam-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/org-roam/org-roam-ui/actions/workflows/ci.yml) [![MELPA](https://melpa.org/packages/org-roam-ui-badge.svg)](https://melpa.org/#/org-roam-ui)
 <img width="1440" alt="Screenshot 2021-10-12 at 12 51 39" src="https://user-images.githubusercontent.com/21983833/136942774-3f293f65-dbd4-4479-b530-1fde738c5289.png">
 
