@@ -36,7 +36,6 @@
 (require 'simple-httpd)
 (require 'org-roam)
 (require 'websocket)
-(require 'org-roam-dailies)
 
 (defgroup org-roam-ui nil
   "UI in Org-roam."
@@ -605,7 +604,7 @@ from all other links."
 		(setq ui-theme org-roam-ui-custom-theme)))
     ui-theme))
 
-
+(defvar org-roam-dailies-directory)
 (defun org-roam-ui--send-variables (ws)
   "Send miscellaneous org-roam variables through the websocket WS."
     (let ((daily-dir (if (boundp 'org-roam-dailies-directory)
