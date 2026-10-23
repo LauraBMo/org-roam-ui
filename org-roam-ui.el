@@ -210,6 +210,11 @@ This serves the web-build and API over HTTP."
     (setq org-roam-ui-ws-socket ws)
     (org-roam-ui--send-variables org-roam-ui-ws-socket)
     (org-roam-ui--send-graphdata)
+    ;; A freshly opened browser has no stored theme, so it starts from the
+    ;; web app's dark default. Push the current Emacs theme on connect;
+    ;; previously this only happened when a theme was enabled after the fact.
+    (when org-roam-ui-sync-theme
+      (org-roam-ui-sync-theme))
     (when org-roam-ui-update-on-save
       (add-hook 'after-save-hook #'org-roam-ui--on-save))
     (message "Connection established with org-roam-ui")
